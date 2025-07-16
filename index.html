@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>zxpdwy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO -->
+    <meta name="description" content="崩坏星穹铁道风格的个人导航页，包含搜索、视频、游戏资源等快捷入口。">
+    <meta name="keywords" content="个人导航, 星穹铁道, 快捷入口, 搜索引擎, 视频网站, 游戏库">
+
+    <!-- 引入Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e56cf;
+            --primary-light: #a084e8;
+            --secondary: #f99417;
+            --dark-bg: rgba(15, 12, 38, 0.75);
+            --light-bg: rgba(245, 243, 255, 0.85);
+            --card-dark: rgba(255, 255, 255, 0.08);
+            --card-light: rgba(15, 12, 38, 0.05);
+            --hover-dark: rgba(110, 86, 207, 0.2);
+            --hover-light: rgba(110, 86, 207, 0.15);
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(15, 12, 38, 0.1);
+            --text-dark: #e0d9ff;
+            --text-light: #3a3266;
+            --tooltip-dark: rgba(15, 12, 38, 0.9);
+            --tooltip-light: rgba(15, 12, 38, 0.8);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+            background-image: url('https://file.51pptmoban.com/d/file/2020/10/11/3eeafe1a72229a38a207110337b0f478.jpg'); /* 崩坏星穹铁道深色背景图 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        /* 亮色主题 */
+        body.light-theme {
+            color: #3a3266;
+            background-image: url('https://wallpaperm.cmcm.com/78d2405d5c316bc22d6632fa04e4ef49.jpg'); /* 崩坏星穹铁道亮色背景图 */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: var(--dark-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-dark);
+        }
+
+        body.light-theme .container {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-light);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .date-time {
+            text-align: left;
+        }
+
+        .current-date {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .current-time {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            position: relative;
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-theme .theme-toggle:hover {
+            background-color: rgba(15, 12, 38, 0.05);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            border-radius: 3px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover::after {
+            transform: scaleX(1);
+        }
+
+        .subtitle {
+            color: var(--text-dark);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        body.light-theme .subtitle {
+            color: var(--text-light);
+        }
+
+        /* 搜索框样式 - 优化聚焦动画 */
+        .search-container {
+            position: relative;
+            margin-bottom: 35px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-box {
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            background-color: var(--card-dark);
+            color: inherit;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .search-box input {
+            background-color: var(--card-light);
+        }
+
+        /* 聚焦动画效果 */
+        .search-box input:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px) scale(1.005);
+            border-color: rgba(110, 86, 207, 0.5);
+            box-shadow: 0 4px 20px rgba(110, 86, 207, 0.15);
+        }
+
+        body.light-theme .search-box input:focus {
+            background-color: rgba(15, 12, 38, 0.08);
+        }
+        
+        /* 光晕效果 - 增强视觉层次感 */
+        .search-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            background: radial-gradient(circle, rgba(110, 86, 207, 0.3) 0%, transparent 70%);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+        
+        .search-box input:focus + .search-glow {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: rgba(15, 12, 38, 0.85);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            margin-top: 5px;
+            overflow: hidden;
+            transform-origin: top center;
+            transform: scaleY(0.9);
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        body.light-theme .search-suggestions {
+            background-color: rgba(245, 243, 255, 0.97);
+        }
+
+        .search-suggestions.active {
+            display: block;
+            transform: scaleY(1);
+            opacity: 1;
+        }
+
+        .suggestion-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-item:hover {
+            background-color: var(--hover-dark);
+        }
+
+        body.light-theme .suggestion-item:hover {
+            background-color: var(--hover-light);
+        }
+        
+        .suggestion-item:first-child {
+            padding-top: 15px;
+        }
+        
+        .suggestion-item:last-child {
+            padding-bottom: 15px;
+        }
+
+        .suggestion-icon {
+            opacity: 0.6;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #e0d9ff;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus + .search-glow + button {
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .search-box button:hover {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 导航分类 */
+        .categories-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .nav-category {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-theme .nav-category {
+            background-color: rgba(15, 12, 38, 0.03);
+        }
+
+        .category-title {
+            font-size: 18px;
+            margin-bottom: 18px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme .category-title {
+            border-bottom: 1px solid rgba(15, 12, 38, 0.08);
+        }
+
+        .category-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-toggle {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .category-toggle.rotate {
+            transform: rotate(90deg);
+        }
+
+        .nav-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background-color: var(--card-dark);
+            color: inherit;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        body.light-theme .nav-item a {
+            background-color: var(--card-light);
+        }
+
+        .nav-item a:hover {
+            background-color: var(--hover-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-theme .nav-item a:hover {
+            background-color: var(--hover-light);
+        }
+
+        .nav-item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-theme .nav-item-icon {
+            background-color: rgba(15, 12, 38, 0.05);
+        }
+
+        .nav-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background-color: var(--tooltip-dark);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 50;
+        }
+
+        body.light-theme .nav-tooltip {
+            background-color: var(--tooltip-light);
+        }
+
+        .nav-item:hover .nav-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+        }
+
+        /* 快速访问 */
+        .quick-access {
+            margin-bottom: 35px;
+        }
+
+        .quick-access-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .quick-link {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            width: 70px;
+        }
+
+        .quick-link-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background-color: var(--card-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .quick-link-icon {
+            background-color: var(--card-light);
+        }
+
+        .quick-link:hover .quick-link-icon {
+            background-color: var(--hover-dark);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        body.light-theme .quick-link:hover .quick-link-icon {
+            background-color: var(--hover-light);
+        }
+
+        .quick-link-label {
+            font-size: 12px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* 游戏弹窗 */
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-modal.active {
+            display: flex;
+        }
+
+        .game-content {
+            width: 100%;
+            max-width: 900px;
+            height: 80vh;
+            background-color: var(--dark-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .game-content {
+            background-color: var(--light-bg);
+        }
+
+        .game-modal.active .game-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .game-header {
+            padding: 15px 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        body.light-theme .game-header {
+            background-color: rgba(15, 12, 38, 0.03);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .close-game {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-game:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-theme .close-game:hover {
+            background-color: rgba(15, 12, 38, 0.05);
+        }
+
+        .game-frame {
+            width: 100%;
+            height: calc(100% - 55px);
+            border: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-dark);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme footer {
+            color: var(--text-light);
+            border-top: 1px solid rgba(15, 12, 38, 0.08);
+        }
+
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .categories-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .header-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .game-content {
+                height: 70vh;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .nav-list {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .search-box input {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .quick-link {
+                width: 60px;
+            }
+
+            .quick-link-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+
+        /* 加载动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container > * {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .container > *:nth-child(1) { animation-delay: 0.1s; }
+        .container > *:nth-child(2) { animation-delay: 0.2s; }
+        .container > *:nth-child(3) { animation-delay: 0.3s; }
+        .container > *:nth-child(4) { animation-delay: 0.4s; }
+        .container > *:nth-child(5) { animation-delay: 0.5s; }
+        .container > *:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-info">
+            <div class="date-time">
+                <div class="current-date" id="currentDate">2023年1月1日 星期一</div>
+                <div class="current-time" id="currentTime">00:00:00</div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <h1>神秘的网站</h1>
+        <p class="subtitle">精选网络工具、资源与服务快捷入口</p>
+    </header>
+
+    <!-- 优化后的搜索框 -->
+    <div class="search-container">
+        <div class="search-box">
+            <form action="https://www.baidu.com/s" method="get" target="_blank" id="searchForm">
+                <input type="text" name="wd" id="searchInput" placeholder="输入关键词搜索..." required>
+                <div class="search-glow"></div>
+                <button type="submit"><i class="fas fa-search fa-lg"></i></button>
+            </form>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions">
+            <div class="suggestion-item">
+                <i class="fas fa-wifi suggestion-icon"></i>
+                <span>热门搜索: 星穹铁道攻略</span>
+            </div>
+            <div class="suggestion-item">
+                <i class="fas fa-star suggestion-icon"></i>
+                <span>热门搜索: 星穹铁道角色</span>
+            </div>
+            <div class="suggestion-item">
+                <i class="fas fa-gamepad suggestion-icon"></i>
+                <span>热门搜索: 星穹铁道最新活动</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速访问 -->
+    <div class="quick-access">
+        <h3 class="quick-access-title">
+            <i class="fas fa-star"></i> 快速访问
+        </h3>
+        <div class="quick-links">
+            <a href="https://www.baidu.com/" target="_blank" class="quick-link" title="百度搜索">
+                <div class="quick-link-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <span class="quick-link-label">百度</span>
+            </a>
+            <a href="https://www.bilibili.com/" target="_blank" class="quick-link" title="B站">
+                <div class="quick-link-icon">
+                    <i class="fab fa-bilibili"></i>
+                </div>
+                <span class="quick-link-label">B站</span>
+            </a>
+            <a href="https://github.com/" target="_blank" class="quick-link" title="GitHub">
+                <div class="quick-link-icon">
+                    <i class="fab fa-github"></i>
+                </div>
+                <span class="quick-link-label">GitHub</span>
+            </a>
+            <a href="https://music.163.com/" target="_blank" class="quick-link" title="网易云音乐">
+                <div class="quick-link-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <span class="quick-link-label">网易云</span>
+            </a>
+            <a href="https://sr.mihoyo.com/" target="_blank" class="quick-link" title="崩坏星穹铁道官网">
+                <div class="quick-link-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span class="quick-link-label">星穹官网</span>
+            </a>
+            <a href="https://wiki.biligame.com/sr/" target="_blank" class="quick-link" title="星穹铁道Wiki">
+                <div class="quick-link-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <span class="quick-link-label">星穹Wiki</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="categories-wrapper">
+        <!-- 搜索与工具 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                搜索与工具
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="https://www.baidu.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        百度搜索
+                    </a>
+                    <span class="nav-tooltip">全球最大的中文搜索引擎</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.google.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        谷歌搜索
+                    </a>
+                    <span class="nav-tooltip">国际知名搜索引擎</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://chrome.zzzmh.cn/index#/search" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        极简插件
+                    </a>
+                    <span class="nav-tooltip">Chrome浏览器扩展插件集合</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://haowallpaper.com/homeView?page=7&sortType=3&rows=9&isFavorites=false&ratioId=4&isSel=false" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        免费壁纸
+                    </a>
+                    <span class="nav-tooltip">高清桌面壁纸下载</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://tool.lu/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        在线工具集
+                    </a>
+                    <span class="nav-tooltip">多种实用在线工具集合</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://moyugongju.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        摸鱼
+                    </a>
+                    <span class="nav-tooltip">摸鱼工具库</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 游戏资源 - 新增泰拉瑞亚相关链接 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                游戏资源
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="https://sr.mihoyo.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        星穹铁道官网
+                    </a>
+                    <span class="nav-tooltip">崩坏星穹铁道官方网站</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://wiki.biligame.com/sr/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        星穹铁道Wiki
+                    </a>
+                    <span class="nav-tooltip">崩坏星穹铁道攻略Wiki</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://dazidazi.com" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-bilibili"></i>
+                        </div>
+                        手速小游戏
+                    </a>
+                    <span class="nav-tooltip">练习打字</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://terraria.org/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        泰拉瑞亚官网
+                    </a>
+                    <span class="nav-tooltip">泰拉瑞亚官方网站</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://calamity.huijiwiki.com/wiki" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        泰拉瑞亚Wiki
+                    </a>
+                    <span class="nav-tooltip">泰拉瑞亚百科全书</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://store.steampowered.com/app/105600/Terraria/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-steam"></i>
+                        </div>
+                        泰拉瑞亚
+                    </a>
+                    <span class="nav-tooltip">泰拉瑞亚Steam商店页面</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://store.steampowered.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-steam"></i>
+                        </div>
+                        Steam商店
+                    </a>
+                    <span class="nav-tooltip">Valve的数字发行平台</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.epicgames.com/store/zh-CN/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        Epic Games
+                    </a>
+                    <span class="nav-tooltip">Epic游戏商店</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 新增：休闲小游戏 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                休闲小游戏
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="game-link" data-game="2048">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        2048
+                    </a>
+                    <span class="nav-tooltip">经典数字合并游戏</span>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="game-link" data-game="snake">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-dragon"></i>
+                        </div>
+                        贪吃蛇
+                    </a>
+                    <span class="nav-tooltip">经典贪吃蛇游戏</span>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="game-link" data-game="tetris">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        俄罗斯方块
+                    </a>
+                    <span class="nav-tooltip">经典方块消除游戏</span>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="game-link" data-game="memory">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        记忆卡片
+                    </a>
+                    <span class="nav-tooltip">考验记忆力的配对游戏</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 开发者资源 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                开发者资源
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="https://github.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        GitHub
+                    </a>
+                    <span class="nav-tooltip">代码托管与版本控制平台</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://stackoverflow.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        Stack Overflow
+                    </a>
+                    <span class="nav-tooltip">程序员问答社区</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://developer.mozilla.org/zh-CN/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        MDN文档
+                    </a>
+                    <span class="nav-tooltip">Web开发者参考文档</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.cloudflare-cn.com/enterprise/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        Cloudflare
+                    </a>
+                    <span class="nav-tooltip">免费域名搭建</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 娱乐与视频 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                娱乐与视频
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="https://www.bilibili.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-bilibili"></i>
+                        </div>
+                        B站
+                    </a>
+                    <span class="nav-tooltip">年轻人喜爱的视频平台</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.youtube.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        YouTube
+                    </a>
+                    <span class="nav-tooltip">全球最大视频分享平台</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://music.163.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        网易云音乐
+                    </a>
+                    <span class="nav-tooltip">在线音乐流媒体平台</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.huya.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        虎牙直播
+                    </a>
+                    <span class="nav-tooltip">游戏直播平台</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 在线阅读与书籍 -->
+        <div class="nav-category">
+            <h2 class="category-title">
+                <div class="category-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                在线阅读与书籍
+                <i class="fas fa-chevron-right category-toggle"></i>
+            </h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="https://www.gutenberg.org/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        古腾堡计划
+                    </a>
+                    <span class="nav-tooltip">免费电子书籍库，经典文学作品</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://book.douban.com/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        豆瓣读书
+                    </a>
+                    <span class="nav-tooltip">书籍推荐、评论与评分社区</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://zh.wikisource.org/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        维基文库
+                    </a>
+                    <span class="nav-tooltip">自由的在线图书馆，多为公共领域文献</span>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.worldcat.org/" target="_blank">
+                        <div class="nav-item-icon">
+                            <i class="fas fa-search-book"></i>
+                        </div>
+                        WorldCat
+                    </a>
+                    <span class="nav-tooltip">全球图书馆目录，查找书籍馆藏</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>zxp &copy; <span id="currentYear">2023</span></p>
+        <div class="footer-links">
+            <a href="#" class="footer-link">关于本站</a>
+            <a href="#" class="footer-link">添加链接</a>
+            <a href="#" class="footer-link">使用帮助</a>
+            <a href="#" class="footer-link">反馈建议</a>
+        </div>
+    </footer>
+</div>
+
+<!-- 游戏弹窗 -->
+<div class="game-modal" id="gameModal">
+    <div class="game-content">
+        <div class="game-header">
+            <div class="game-title" id="gameTitle">2048</div>
+            <button class="close-game" id="closeGame">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <iframe class="game-frame" id="gameFrame" src=""></iframe>
+    </div>
+</div>
+
+<script>
+    // 更新日期和时间
+    function updateDateTime() {
+        const now = new Date();
+        
+        // 更新日期
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('zh-CN', options);
+        
+        // 更新时间（带秒）
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        document.getElementById('currentTime').textContent = now.toLocaleTimeString('zh-CN', timeOptions);
+        
+        // 更新年份
+        document.getElementById('currentYear').textContent = now.getFullYear();
+    }
+    
+    // 初始化日期时间并设置定时器每秒更新
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // 检查本地存储中的主题偏好
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    body.classList.toggle('light-theme', savedTheme === 'light');
+    updateThemeIcon();
+    
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const currentTheme = body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+        updateThemeIcon();
+    });
+    
+    function updateThemeIcon() {
+        const isLight = body.classList.contains('light-theme');
+        themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        themeToggle.title = isLight ? '切换到暗色主题' : '切换到亮色主题';
+    }
+
+    // 搜索框聚焦时显示建议
+    const searchInput = document.getElementById('searchInput');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    
+    searchInput.addEventListener('focus', () => {
+        searchSuggestions.classList.add('active');
+    });
+    
+    searchInput.addEventListener('blur', () => {
+        // 延迟隐藏以允许点击建议项
+        setTimeout(() => {
+            searchSuggestions.classList.remove('active');
+        }, 200);
+    });
+    
+    // 点击建议项时填充搜索框
+    const suggestionItems = document.querySelectorAll('.suggestion-item');
+    suggestionItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const text = item.textContent.trim().replace('热门搜索: ', '');
+            searchInput.value = text;
+            searchSuggestions.classList.remove('active');
+            // 提交表单
+            document.getElementById('searchForm').submit();
+        });
+    });
+
+    // 分类折叠/展开功能（默认全部展开）
+    const categoryTitles = document.querySelectorAll('.category-title');
+
+    // 初始化时全部展开（不折叠任何分类）
+    categoryTitles.forEach((title) => {
+        const toggleIcon = title.querySelector('.category-toggle');
+        const navList = title.nextElementSibling;
+
+        // 强制设置为展开状态（网格布局）
+        navList.style.display = 'grid';
+        // 确保箭头图标初始状态为未旋转（展开状态）
+        toggleIcon.classList.remove('rotate');
+
+        // 保留点击折叠/展开的功能
+        title.addEventListener('click', () => {
+            toggleIcon.classList.toggle('rotate');
+            navList.style.display = navList.style.display === 'none' ? 'grid' : 'none';
+        });
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // 键盘导航
+    document.addEventListener('keydown', (e) => {
+        // 如果焦点在输入框中，则不处理键盘导航
+        if (document.activeElement.tagName === 'INPUT') return;
+        
+        // 使用斜杠键快速聚焦搜索框
+        if (e.key === '/' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    });
+
+    // 游戏弹窗功能
+    const gameModal = document.getElementById('gameModal');
+    const gameFrame = document.getElementById('gameFrame');
+    const gameTitle = document.getElementById('gameTitle');
+    const closeGame = document.getElementById('closeGame');
+    const gameLinks = document.querySelectorAll('.game-link');
+
+    // 游戏URL映射
+    const gameUrls = {
+        '2048': 'https://play2048.co/',
+        'snake': 'https://www.google.com/fbx?fbx=snake_arcade',
+        'tetris': 'https://tetris.com/play-tetris',
+        'memory': 'https://www.helpfulgames.com/subjects/brain-training/memory.html'
+    };
+
+    // 打开游戏
+    gameLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const gameType = link.getAttribute('data-game');
+            const gameUrl = gameUrls[gameType];
+            
+            if (gameUrl) {
+                gameTitle.textContent = link.textContent.trim();
+                gameFrame.src = gameUrl;
+                gameModal.classList.add('active');
+                
+                // 防止滚动
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // 关闭游戏
+    closeGame.addEventListener('click', () => {
+        gameModal.classList.remove('active');
+        // 延迟清空src以防止页面卡顿
+        setTimeout(() => {
+            gameFrame.src = '';
+        }, 300);
+        
+        // 恢复滚动
+        document.body.style.overflow = '';
+    });
+
+    // 点击模态框背景关闭
+    gameModal.addEventListener('click', (e) => {
+        if (e.target === gameModal) {
+            closeGame.click();
+        }
+    });
+
+    // 键盘ESC关闭游戏
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && gameModal.classList.contains('active')) {
+            closeGame.click();
+        }
+    });
+</script>
+</body>
+</html>
